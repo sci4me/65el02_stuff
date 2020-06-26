@@ -46,7 +46,9 @@ mmu MMUOp::ENABLE_RB ; Enable RedBus window
         lda #65
         sta REDBUS+Monitor::display
 
-        blit_shift REDBUS, #0, #1, #0, #0, #80, #49
+        ; blit_shift REDBUS, #0, #1, #0, #0, #80, #49
+        ; blit_invert REDBUS, #12, #6, #14, #28
+        blit_invert REDBUS, #5, #5, #10, #10
     a16
 
 

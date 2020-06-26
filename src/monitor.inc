@@ -16,8 +16,8 @@
 	blit_mode 	.byte
 	blit_sx		.byte
 	blit_sy 	.byte
-	blit_ox		.byte
-	blit_oy		.byte
+	blit_dx		.byte
+	blit_dy		.byte
 	blit_w		.byte
 	blit_h		.byte
 
@@ -39,57 +39,60 @@
 .endenum
 
 
-.macro blit_fill rb, c, ox, oy, w, h
+.macro blit_fill rb, c, dx, dy, w, h
 	; assumes monitor is the selected bus ID
+	pha
 	lda c
 	sta rb+Monitor::blit_sx
-	stz rb+Monitor::blit_ox
-    stz rb+Monitor::blit_oy
+	stz rb+Monitor::blit_dx
+    stz rb+Monitor::blit_dy
     lda w
     sta rb+Monitor::blit_w
     lda h
     sta rb+Monitor::blit_h
-    lda BlitMode::FILL
+    lda #BlitMode::FILL
     sta rb+Monitor::blit_mode
 :   wai
     cmp rb+Monitor::blit_mode
     beq :-
+    pla
 .endmacro
 
-.macro blit_invert rb, c, ox, oy, w, h
+.macro blit_invert rb, dx, dy, w, h
 	; assumes monitor is the selected bus ID
-	lda c
-	sta rb+Monitor::blit_sx
-	stz rb+Monitor::blit_ox
-    stz rb+Monitor::blit_oy
+	pha
+	lda dx
+	sta rb+Monitor::blit_dx
+	lda dy
+    sta rb+Monitor::blit_dy
     lda w
     sta rb+Monitor::blit_w
     lda h
     sta rb+Monitor::blit_h
-    lda BlitMode::INVERT
+    lda #BlitMode::INVERT
     sta rb+Monitor::blit_mode
 :   wai
     cmp rb+Monitor::blit_mode
     beq :-
+    pla
 .endmacro
 
 .macro blit_shift rb, sx, sy, dx, dy, w, h
 	; assumes monitor is the selected bus ID
-	lda sx
-	sta rb+Monitor::blit_sx
-	lda sy
-	sta rb+Monitor::blit_sy
-	lda dx
-	sta rb+Monitor::blit_ox
-	lda dy
-	sta rb+Monitor::blit_oy
-	lda w
-	sta rb+Monitor::blit_w
-	lda h
-	sta rb+Monitor::blit_h
-	lda BlitMode::SHIFT
-	sta rb+Monitor::blit_mode
-:	wai
-	cmp rb+Monitor::blit_mode
-	beq :-
+	pha
+    stz rb+Monitor::blit_dx
+    stz rb+Monitor::blit_dy
+    stz rb+Monitor::blit_sx
+    lda #1
+    sta rb+Monitor::blit_sy
+    lda #80
+    sta rb+Monitor::blit_w
+    lda #49
+    sta rb+Monitor::blit_h
+    lda #BlitMode::SHIFT
+    sta rb+Monitor::blit_mode
+:   wai
+    cmp rb+Monitor::blit_mode
+    beq :-
+	pla
 .endmacro
