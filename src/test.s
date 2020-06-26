@@ -8,50 +8,42 @@
 .define REDBUS $0300
 
 
-; Disable interrupts
-sei
+sei ; Disable interrupts
 
-; Switch to native mode
-clc
+clc ; Switch to native mode
 xce
 
-
-; Switch to full 16-bit mode
-a16
+a16 ; Switch to full 16-bit mode
 i16
 
-
-; Set up stack and disable decimal mode
-pha
-ldx #$01FF
+ldx #$01FF ; Set up stack
 txs
-cld
 
+cld ;Disable decimal mode
 
-; Set POR address
-lda #LOADED_CODE_START
+lda #LOADED_CODE_START ; Set POR address
 mmu MMUOp::SET_POR
 
+cli ; Enable interrupts
 
-; Enable interrupts
-cli
-
-
-; Set the RedBus window at 0x0300
-lda #REDBUS
+lda #REDBUS ; Set the RedBus window at 0x0300
 mmu MMUOp::SET_MAP
 
-; Enable RedBus window
-mmu MMUOp::ENABLE_RB
+mmu MMUOp::ENABLE_RB ; Enable RedBus window
 
 
+    a8
     lda FRONT_PANEL_DISPLAY_ID
     mmu MMUOp::SET_ID
-    blit_fill REDBUS, #32, 0, 0, #MONITOR_W, #MONITOR_H
+    ; blit_fill REDBUS, #32, 0, 0, #MONITOR_W, #MONITOR_H
+
+    
+    lda #65
+    sta REDBUS+Monitor::display
+    a16
 
 
-; Map the IO Expander (assumed bus ID 3) in on RedBus
-lda #3
+lda #3 ; Map the IO Expander (assumed bus ID 3) in on RedBus
 mmu MMUOp::SET_ID
 
 

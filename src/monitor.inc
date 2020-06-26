@@ -60,3 +60,16 @@
     stz rb+Monitor::cursor_y
     a16
 .endmacro
+
+.macro blit_shift rb, sx, xy, dx, dy, w, h
+	a8
+	lda sx
+	sta rb+Monitor::sx
+	lda sy
+	sta rb+Monitor::sy
+	lda dx
+	sta rb+Monitor::ox
+	lda dy
+	sta rb+Monitor::oy
+	lda
+.endmacro
