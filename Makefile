@@ -4,7 +4,7 @@ RP_DIR="/home/sci4me/.local/share/multimc/instances/Nostalgia/.minecraft/saves/s
 .PHONY: all
 
 all:
-	cl65 -t none --cpu 65816 -o $(DISK) src/test.s
-	rm -f src/test.o
+	cl65 -t none --cpu 65816 --config rpc8e.cfg -o $(DISK) src/test.s src/monitor.s
+	rm -f src/*.o
 	padel02 $(DISK)
 	mv $(DISK) $(RP_DIR)

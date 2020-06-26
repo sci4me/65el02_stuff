@@ -46,3 +46,12 @@
 	SET_POR			= $06
 	GET_POR			= $86
 .endenum
+
+
+.macro txi
+	.byte $5C
+.endmacro
+
+.macro nxa
+	.byte $42
+.endmacro

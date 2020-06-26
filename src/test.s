@@ -3,6 +3,8 @@
 .include "disk.inc"
 .include "iox.inc"
 
+.import puts
+
 .org LOADED_CODE_START
 
 .define REDBUS $0300
@@ -39,17 +41,11 @@ mmu MMUOp::ENABLE_RB ; Enable RedBus window
         blit_fill REDBUS, #32, 0, 0, #MONITOR_W, #MONITOR_H
         stz REDBUS+Monitor::row
         stz REDBUS+Monitor::cursor_x
-        lda #4
-        sta REDBUS+Monitor::cursor_y
-        sta REDBUS+Monitor::row
-
-        lda #65
-        sta REDBUS+Monitor::display
-
-        ; blit_shift REDBUS, #0, #1, #0, #0, #80, #49
-        ; blit_invert REDBUS, #12, #6, #14, #28
-        blit_invert REDBUS, #5, #5, #10, #10
+        stz REDBUS+Monitor::cursor_y
     a16
+
+    lda #hwmsg
+    jsr puts
 
 
 lda #3 ; Map the IO Expander (assumed bus ID 3) in on RedBus
@@ -73,6 +69,7 @@ loop:
 
 
 count: .res 2
+hwmsg: .asciiz "Hello, rpc8e!"
 
 
 .proc ticks
