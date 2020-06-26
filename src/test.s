@@ -1,7 +1,7 @@
 .include "65el02.inc"
-.include "iox.inc"
-.include "disk.inc"
 .include "monitor.inc"
+.include "disk.inc"
+.include "iox.inc"
 
 .org LOADED_CODE_START
 
@@ -33,13 +33,20 @@ mmu MMUOp::ENABLE_RB ; Enable RedBus window
 
 
     a8
-    lda FRONT_PANEL_DISPLAY_ID
-    mmu MMUOp::SET_ID
-    ; blit_fill REDBUS, #32, 0, 0, #MONITOR_W, #MONITOR_H
+        lda FRONT_PANEL_DISPLAY_ID
+        mmu MMUOp::SET_ID
 
-    
-    lda #65
-    sta REDBUS+Monitor::display
+        blit_fill REDBUS, #32, 0, 0, #MONITOR_W, #MONITOR_H
+        stz REDBUS+Monitor::row
+        stz REDBUS+Monitor::cursor_x
+        lda #4
+        sta REDBUS+Monitor::cursor_y
+        sta REDBUS+Monitor::row
+
+        lda #65
+        sta REDBUS+Monitor::display
+
+        blit_shift REDBUS, #0, #1, #0, #0, #80, #49
     a16
 
 
