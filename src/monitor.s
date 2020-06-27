@@ -57,10 +57,11 @@
 	pha
 	phx
 
-	ldx #0
+	tax
 	txi
 	a8
 :	nxa
+	cmp #0 ; nxa doesn't update flags!
 	beq :+
 	jsr putc
 	bra :-

@@ -27,9 +27,9 @@
 .endstruct
 
 .enum CursorMode
-	HIDDEN
-	SOLID
-	BLINK
+	HIDDEN  = 0
+	SOLID   = 1
+	BLINK	= 2
 .endenum
 
 .enum BlitMode
